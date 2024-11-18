@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Collection Form</title>
+    <style>
+        /* Reset Styles */
+        body, h1, form, label, input, button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/046/604/040/non_2x/a-lush-green-jungle-with-many-leaves-and-plants-the-image-has-a-serene-and-peaceful-mood-as-it-captures-the-beauty-of-nature-and-the-tranquility-of-a-dense-forest-photo.jpeg');
+            background-size: cover;
+            background-position: center;
+            color: #2e2e2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Form Container Styling */
+        form {
+            background: rgba(255, 255, 255, 0.6); /* Semi-transparent background */
+            padding: 15px 20px; /* Reduced padding */
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            width: 450px; /* Narrower form width */
+            text-align: left;
+        }
+
+        /* Form Title */
+        h1 {
+            text-align: center;
+            color: #4a3b26; /* Earthy brown color */
+            margin-bottom: 15px;
+            font-size: 20px; /* Reduced font size */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Label Styling */
+        label {
+            font-size: 12px; /* Reduced font size */
+            color: #333;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Input Fields Styling */
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px; /* Reduced padding */
+            margin-bottom: 10px; /* Reduced spacing */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px; /* Reduced font size */
+        }
+
+        /* Input Focus State */
+        input:focus {
+            border-color: #6c873f; /* Forest green */
+            outline: none;
+            box-shadow: 0px 0px 6px rgba(108, 135, 63, 0.5);
+        }
+
+        /* Submit Button Styling */
+        button {
+            background-color: #6c873f; /* Forest green */
+            color: #fff;
+            font-size: 14px; /* Reduced font size */
+            padding: 8px; /* Reduced padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Button Hover Effect */
+        button:hover {
+            background-color: #4e662d; /* Darker green */
+        }
+
+        /* Add Leopard Logo */
+        form::before {
+            content: '';
+            display: block;
+            width: 60px; /* Smaller logo */
+            height: 60px;
+            background: url('https://png.pngtree.com/png-vector/20221013/ourmid/pngtree-leopard-face-color-vector-illustration-png-image_6277973.png') no-repeat center/cover;
+            margin: 0 auto 10px; /* Reduced margin */
+            border-radius: 50%;
+        }
+
+        /* Adjustments for Small Screens */
+        @media (max-width: 400px) {
+            form {
+                width: 90%;
+                padding: 10px 15px; /* Further reduced padding */
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 6px;
+            }
+        }
+    </style>
+    <script>
+        function fetchGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById("latitude").value = position.coords.latitude;
+                    document.getElementById("longitude").value = position.coords.longitude;
+                    document.getElementById("accuracy").value = position.coords.accuracy;
+                }, function(error) {
+                    alert("Error retrieving geolocation: " + error.message);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function setDateAndTimestamp() {
+            var now = new Date();
+            var date = now.getFullYear() + '-' + 
+                ('0' + (now.getMonth() + 1)).slice(-2) + '-' + 
+                ('0' + now.getDate()).slice(-2);
+            document.getElementById("date").value = date;
+
+            var time = ('0' + now.getHours()).slice(-2) + ':' + 
+                ('0' + now.getMinutes()).slice(-2) + ':' + 
+                ('0' + now.getSeconds()).slice(-2);
+            document.getElementById("timestamp").value = time;
+        }
+
+        window.onload = function() {
+            fetchGeolocation();
+            setDateAndTimestamp();
+        }
+    </script>
+</head>
+<body>
+    <form action="DataCollectionServlet" method="POST" enctype="multipart/form-data">
+        <h1>Data Collection Form</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date" readonly><br>
+
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" name="timestamp" readonly><br>
+
+        <label for="latitude">Latitude:</label>
+        <input type="text" id="latitude" name="latitude" readonly><br>
+
+        <label for="longitude">Longitude:</label>
+        <input type="text" id="longitude" name="longitude" readonly><br>
+
+        <label for="accuracy">Accuracy:</label>
+        <input type="text" id="accuracy" name="accuracy" readonly><br>
+
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image"><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,89 @@
+/* General styling */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: url('https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-lush-green-forest-with-river-and-mountain-ai-generated-wallpaper-sr03072417-cover.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Header styling */
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #ffd700;
+    text-shadow: 2px 2px 5px #000;
+}
+
+/* Form container */
+form {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 400px;
+    color: #fff;
+}
+
+/* Input fields */
+form label {
+    display: block;
+    text-align: left;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #000;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+form textarea {
+    resize: none;
+}
+
+/* Submit button */
+form button {
+    background: #ff8c00;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+form button:hover {
+    background: #ffa500;
+    transform: scale(1.05);
+}
+
+/* Link styling */
+a {
+    margin-top: 15px;
+    display: inline-block;
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #ffa500;
+}
