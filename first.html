@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Collection - Image</title>
+    <link rel="stylesheet" href="/public/style.css">
+    <script src="server.js" defer></script>
+
+</head>
+<body>
+    <h2>Data Collection - Image</h2>
+    <form id="imageForm" >
+        <label for="image">Capture or Select Image:</label><br>
+        <input type="file" id="image" name="image" accept="image/*" required><br><br>
+        <button type="submit">Submit Image</button>
+    </form>
+<!--  js require for saving image data in db  and redirect it to secong html -->
+    <script>
+        const imageInput = document.getElementById('image');
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const imgPreview = document.createElement('img');
+                imgPreview.src = URL.createObjectURL(this.files[0]);
+                document.body.appendChild(imgPreview);
+            }
+        });
+    </script>
+</body>
+</html>
