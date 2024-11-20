@@ -14,16 +14,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @WebServlet("/DataCollectionServlet")
-@MultipartConfig(maxFileSize = 1024 * 1024 * 5) // Limit file size to 5MB
+@MultipartConfig(maxFileSize = 1024 * 1024 * 5) 
 public class DataCollectionServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // Database credentials
+    
     String dbUrl = "jdbc:mysql://localhost:3306/leopard";
     String dbUser = "root";
     String dbPassword = "negs27@sql";
 
-    // Register MySQL driver explicitly (Optional)
+   
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -35,20 +35,20 @@ public class DataCollectionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        // Retrieve data from the form
+       
         Part imagePart = request.getPart("image");
         String date = request.getParameter("date");
         String timestamp = request.getParameter("timestamp");
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
         String accuracy = request.getParameter("accuracy");
-        String username = request.getParameter("username"); // Username field
+        String username = request.getParameter("username");
 
-        // Handle null or empty inputs (trim any extra spaces)
+        
         if (username != null) username = username.trim();
 
         try (Connection connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
-            // Check if the username exists in the database
+          
             String checkUserQuery = "SELECT COUNT(*) FROM member WHERE username = ?";
             PreparedStatement checkUserStmt = connection.prepareStatement(checkUserQuery);
             checkUserStmt.setString(1, username);
@@ -58,32 +58,32 @@ public class DataCollectionServlet extends HttpServlet {
             int userCount = rs.getInt(1);
 
             if (userCount == 0) {
-                // Username does not exist in the database
+               
                 response.getWriter().println("Error: Username does not exist in the database.");
                 return;
             }
 
-            // If username exists, proceed with the data insertion
+            
             String sql = "INSERT INTO Collection (username, image, date, timestamp, latitude, longitude, accuracy) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            // Set image data as binary stream, if present
+           
             if (imagePart != null && imagePart.getSize() > 0) {
                 InputStream imageInputStream = imagePart.getInputStream();
-                statement.setBlob(2, imageInputStream); // Set image
+                statement.setBlob(2, imageInputStream); 
             } else {
-                statement.setNull(2, java.sql.Types.BLOB); // Handle no image case
+                statement.setNull(2, java.sql.Types.BLOB); 
             }
 
-            // Set other data fields
-            statement.setString(1, username); // Set the username
+          
+            statement.setString(1, username); 
             statement.setString(3, date);
             statement.setString(4, timestamp);
-            statement.setDouble(5, Double.parseDouble(latitude)); // Set latitude
-            statement.setDouble(6, Double.parseDouble(longitude)); // Set longitude
-            statement.setString(7, accuracy); // Set accuracy
+            statement.setDouble(5, Double.parseDouble(latitude)); 
+            statement.setDouble(6, Double.parseDouble(longitude)); 
+            statement.setString(7, accuracy); 
 
-            // Execute the insert statement
+            
             int row = statement.executeUpdate();
             if (row > 0) {
                 response.getWriter().println("Data uploaded and saved successfully.");

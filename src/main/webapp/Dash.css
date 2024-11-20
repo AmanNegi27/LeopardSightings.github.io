@@ -1,4 +1,4 @@
-/* General styling */
+
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
@@ -8,7 +8,7 @@ body {
     background-size: cover;
 }
 
-/* Header styling */
+
 header {
     padding: 20px;
     color: #ffeb3b;
@@ -20,21 +20,20 @@ header h1 {
     font-size: 2.5rem;
 }
 
-/* Main container styling */
+
 main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    align-items: center; /* Align items vertically */
-    margin: -50px auto 0; /* Adjust this negative value to fine-tune */
+    align-items: center; 
+    margin: -50px auto 0; 
     padding: 0;
     width: 90%;
     max-width: 1200px;
-    min-height: calc(100vh - 100px); /* Fill the viewport, minus header height */
+    min-height: calc(100vh - 100px); 
     box-sizing: border-box;
 }
 
-/* Section styling */
 .section {
     flex: 1 1 calc(30% - 20px);
     margin: 10px;
@@ -70,12 +69,12 @@ main {
     color: #000;
 }
 
-/* Hover effect */
+
 .section:hover {
     transform: scale(1.05);
 }
 
-/* Specific backgrounds for each section */
+
 .portfolio {
     background-image: url('https://img.freepik.com/free-vector/cartoon-jungle-background_52683-61450.jpg');
 }
@@ -88,7 +87,7 @@ main {
     background-image: url('https://thumbs.dreamstime.com/b/old-vintage-retro-compass-ancient-map-background-old-vintage-retro-compass-ancient-map-background-travel-geography-109584445.jpg');
 }
 
-/* Responsive design */
+
 @media (max-width: 768px) {
     .section {
         flex: 1 1 calc(100% - 20px);

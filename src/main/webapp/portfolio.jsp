@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
     <style>
-        /* Body styling */
+        
         body {
             font-family: Arial, sans-serif;
             background: linear-gradient(to bottom, #fefbd8, #f4e8c1);
@@ -15,7 +15,7 @@
             padding: 0;
         }
 
-        /* Header styling */
+      
         h2 {
             text-align: center;
             color: #2a6f2e;
@@ -24,7 +24,7 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Table styling */
+       
         table {
             width: 90%;
             margin: 20px auto;
@@ -54,7 +54,7 @@
             object-fit: cover;
         }
 
-        /* Alternating row colors */
+       
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
@@ -63,14 +63,14 @@
             background-color: #f1f1f1;
         }
 
-        /* Welcome message styling */
+
         p {
             text-align: center;
             font-size: 1.2rem;
             color: #4b7b4b;
         }
 
-        /* Footer message */
+       
         footer {
             text-align: center;
             margin: 20px 0;
@@ -88,7 +88,7 @@
         } else {
             out.println("<p>Welcome, " + username + "!</p>");
 
-            // Connect to the database and fetch portfolio data
+            
             String url = "jdbc:mysql://localhost:3306/leopard";
             String dbUser = "root";
             String dbPassword = "negs27@sql";
@@ -108,16 +108,16 @@
                     data.put("longitude", rs.getDouble("longitude"));
                     data.put("date", rs.getString("date"));
 
-                    // Extract the time portion from the timestamp
+                   
                     java.sql.Timestamp timestamp = rs.getTimestamp("timestamp");
                     if (timestamp != null) {
-                        String time = timestamp.toString().substring(11); // HH:mm:ss.SSS
+                        String time = timestamp.toString().substring(11); 
                         data.put("timestamp", time);
                     } else {
                         data.put("timestamp", "N/A");
                     }
 
-                    // Fetch the image as a binary stream
+                  
                     InputStream imageStream = rs.getBinaryStream("image");
                     byte[] imageBytes = null;
 
@@ -137,7 +137,7 @@
                 out.println("<p>Error retrieving data.</p>");
             }
 
-            // Display data in a table
+            
             if (portfolioData.isEmpty()) {
                 out.println("<p>No portfolio data found for user: " + username + "</p>");
             } else {

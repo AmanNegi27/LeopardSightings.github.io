@@ -14,7 +14,7 @@ public class DatabaseManager {
 		try {
 			Class.forName(dbdriver);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -47,7 +47,6 @@ public class DatabaseManager {
 	        ps.setString(5, member.getPassword());
 	        ps.setString(6, member.getUserName());
 	        
-	        // Execute update
 	        ps.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();

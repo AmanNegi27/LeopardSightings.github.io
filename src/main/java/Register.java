@@ -23,10 +23,10 @@ public class Register extends HttpServlet {
         
         response.getWriter().print(result);
         if ("Data Entered Successfully".equals(result)) {
-            // Redirect to data collection page
+            
             response.sendRedirect("login.jsp");
         } else {
-            // If insertion fails, show an error message
+           
             response.getWriter().print("Data insertion failed. Please try again.");
         }
     }

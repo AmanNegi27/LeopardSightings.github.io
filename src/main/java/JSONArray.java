@@ -6,16 +6,16 @@ public class JSONArray {
 
     private List<Object> list;
 
-    // Default constructor
+    
     public JSONArray() {
         this.list = new ArrayList<>();
     }
 
-    // Constructor to accept a double array
+   
     public JSONArray(double[] array) {
         this.list = new ArrayList<>();
         for (double value : array) {
-            list.add(value); // Autoboxing to Double
+            list.add(value); 
         }
     }
 

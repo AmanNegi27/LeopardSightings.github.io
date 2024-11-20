@@ -6,17 +6,17 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="Dash.css">
     <script>
-        // JavaScript to display the username dynamically
+        
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const username = urlParams.get('username'); // Retrieve username from query parameter
+            const username = urlParams.get('username');
 
             if (username) {
-                // Display the username in the welcome message
+               
                 document.getElementById('welcomeMessage').innerHTML = "Welcome " + username;
-                sessionStorage.setItem('username', username); // Store username in sessionStorage for reuse
+                sessionStorage.setItem('username', username); 
             } else {
-                // Fallback to sessionStorage if query parameter is not provided
+               
                 const storedUsername = sessionStorage.getItem('username');
                 if (storedUsername) {
                     document.getElementById('welcomeMessage').innerHTML = "Welcome " + storedUsername;
@@ -26,11 +26,11 @@
             }
         };
 
-        // Function to redirect to the portfolio page with the username
+       
         function goToPortfolio() {
-            const username = sessionStorage.getItem('username'); // Get the username from sessionStorage
+            const username = sessionStorage.getItem('username');
             if (username) {
-                // Redirect to the portfolio page with the username as a query parameter
+               
                 window.location.href = `portfolio.jsp?username=${username}`;
             } else {
                 alert("Username not available. Please log in again.");
@@ -43,25 +43,25 @@
         <h1 id="welcomeMessage">Welcome to the Leopard Sighting Dashboard</h1>
     </header>
     <main>
-        <!-- Portfolio Section -->
+        
         <div class="section portfolio">
             <h2>Portfolio</h2>
             <button onclick="goToPortfolio()">Go to Portfolio</button>
         </div>
 
-        <!-- Report a Sighting Section -->
+        
         <div class="section report">
             <h2>Report a Sighting</h2>
-            <form action="second.html" method="get">
-                <button type="submit">Report a Sighting</button>
+            <form action="DataCollection.html" method="get">
+                <button type="submit">Go to Data Collection</button>
             </form>
         </div>
 
-        <!-- View Leopard Sightings Section -->
+       
         <div class="section sightings">
             <h2>View Leopard Sightings</h2>
             <form action="RiskMap.html" method="get">
-                <button type="submit">View Sightings</button>
+                <button type="submit">View Risk Map</button>
             </form>
         </div>
     </main>

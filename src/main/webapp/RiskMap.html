@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
     <style>
         body {
             margin: 0;
@@ -19,7 +20,7 @@
         }
 
         #map {
-            height: 90vh;
+            height: 82vh;
             width: 100%;
         }
 
@@ -53,24 +54,42 @@
             height: auto;
             margin-top: 10px;
         }
+
+        
+        .slider-container {
+            margin: 1px;
+            text-align: top;
+        }
+
+        .slider {
+            width: 80%;
+        }
+        
     </style>
 </head>
 <body>
-    <h1>Leopard Sighting Risk Map (Last 10 Days Leopard Sightings)</h1>
+    <h1>Leopard Sighting Risk Map (Last 20 Days Leopard Sightings)</h1>
     <div id="map"></div>
     <div id="error-message" class="error-message"></div>
-    <script>
-        // Initialize the map
-        const map = L.map('map').setView([28.0, 77.0], 6); // Default location
+    
+   
+    <div class="slider-container">
+        <label for="radiusSlider">Radius: <span id="radiusValue">1000</span> meters</label>
+        <input type="range" id="radiusSlider" class="slider" min="200" max="5000" value="1000" step="100">
+    </div>
 
-        // Base layers
+    <script>
+       
+        const map = L.map('map').setView([28.0, 77.0], 6); 
+
+       
         const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
             maxZoom: 18
         }).addTo(map);
 
-        const satelliteLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap (Satellite)',
+        const satelliteImageryLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© Esri & Contributors',
             maxZoom: 18
         });
 
@@ -79,14 +98,43 @@
             maxZoom: 17
         });
 
-        // Layer group for leopard sightings
+      
+        const userIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/1476/1476737.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+        const leopardIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/3770/3770433.png', 
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        });
+
+       
         const sightingMarkers = L.layerGroup().addTo(map);
 
-        // Fetch data from the servlet and add markers
+       
+        const heatmapPoints = [];
+        const heatLayer = L.heatLayer(heatmapPoints, {
+            radius: 25, 
+            blur: 15,   
+            maxZoom: 17,
+            gradient: {
+                0.4: 'blue',
+                0.65: 'lime',
+                1: 'red'
+            }
+        }).addTo(map);
+
+        
         fetch("RiskMapServlet")
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                	throw new Error(`HTTP error! Status: ${response.status}`);
+
                 }
                 return response.json();
             })
@@ -102,7 +150,11 @@
                             !isNaN(lat) && lat >= -90 && lat <= 90 &&
                             !isNaN(lon) && lon >= -180 && lon <= 180
                         ) {
+                           
+                            heatmapPoints.push([lat, lon, 0.8]); 
+
                             const imageSrc = `ImageServlet?imageId=${location.imageId}`;
+
 
                             const popupContent = ` 
                                 <b>Latitude:</b> ${lat}<br>
@@ -111,10 +163,13 @@
                                 <b>Timestamp:</b> ${location.timestamp}<br>
                                 <img src="${imageSrc}" alt="Leopard Image"><br>
                             `;
-                            const marker = L.marker([lat, lon]).bindPopup(popupContent);
+                            const marker = L.marker([lat, lon], { icon: leopardIcon }).bindPopup(popupContent);
                             sightingMarkers.addLayer(marker);
                         }
                     });
+
+                   
+                    heatLayer.setLatLngs(heatmapPoints);
                 } else {
                     throw new Error("Invalid data format or empty data");
                 }
@@ -124,37 +179,45 @@
                 document.getElementById("error-message").textContent = "Failed to load the risk map data.";
             });
 
-        // Add locate control to find user's location
+       
         const locateControl = L.control.locate({
             setView: true,
             flyTo: true,
-            showPopup: false
+            showPopup: false,
+            locateOptions: {
+                maxZoom: 14
+            }
         }).addTo(map);
 
-        // Add multi-layer controls
-        const baseLayers = {
-            "Street View": streetLayer,
-            "Satellite View": satelliteLayer,
-            "Topographic View": topographicLayer
-        };
-
-        const overlays = {
-            "Leopard Sightings": sightingMarkers
-        };
-
-        L.control.layers(baseLayers, overlays).addTo(map);
-
-        // Handle user location events
+       
+        let userMarker = null;
         let userCircle = null;
+
         map.on("locationfound", (e) => {
             const userLat = e.latitude;
             const userLon = e.longitude;
-            const userAccuracy = 200; // Radius in meters
+            let userAccuracy = parseInt(document.getElementById("radiusSlider").value); 
 
-            if (userCircle) {
-                map.removeLayer(userCircle);
+            if (userMarker) {
+                map.removeLayer(userMarker);
             }
 
+            if (userCircle) {
+                map.removeLayer(userCircle); 
+            }
+
+         
+            userMarker = L.marker([userLat, userLon], { icon: userIcon }).addTo(map);
+
+          
+            userCircle = L.circle([userLat, userLon], {
+                radius: userAccuracy,
+                color: 'red', 
+                fillColor: 'red',
+                fillOpacity: 0.2 
+            }).addTo(map);
+
+            
             let isLeopardNearby = false;
             sightingMarkers.eachLayer(marker => {
                 const markerLatLng = marker.getLatLng();
@@ -164,25 +227,33 @@
                 }
             });
 
-            const circleColor = isLeopardNearby ? 'red' : 'blue';
-            const fillColor = isLeopardNearby ? 'red' : 'blue';
-
-            userCircle = L.circle([userLat, userLon], {
-                radius: userAccuracy,
-                color: circleColor,
-                fillColor: fillColor,
-                fillOpacity: 0.2
-            }).addTo(map);
-
             if (isLeopardNearby) {
-                alert("Warning: A leopard sighting has been detected within 200 meters!");
+                alert(`Warning: A leopard sighting has been detected within ${userAccuracy} meters!`);
             }
+
+            map.setView([userLat, userLon], 14); 
         });
 
         map.on("locationerror", (e) => {
-            console.error("Location error:", e.message);
-            document.getElementById("error-message").textContent = "Failed to fetch your location.";
+            console.error('Location error:', e);
+            document.getElementById("error-message").textContent = "Failed to get your location.";
         });
+
+       
+        const radiusSlider = document.getElementById("radiusSlider");
+        const radiusValue = document.getElementById("radiusValue");
+        radiusSlider.addEventListener("input", function () {
+            radiusValue.textContent = radiusSlider.value;
+        });
+
+        L.control.layers({
+            "Street View": streetLayer,
+            "Satellite Imagery": satelliteImageryLayer,
+            "Topographic": topographicLayer
+        }, {
+            "Leopard Sightings": sightingMarkers,
+            "Heatmap": heatLayer
+        }).addTo(map);
     </script>
 </body>
 </html>

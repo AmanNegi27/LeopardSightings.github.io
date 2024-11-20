@@ -17,7 +17,7 @@ public class ImageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get the image ID from the request (assuming each image has a unique ID)
+        
         String imageId = request.getParameter("imageId");
 
         if (imageId != null) {
@@ -26,24 +26,22 @@ public class ImageServlet extends HttpServlet {
             ResultSet rs = null;
 
             try {
-                // Load MySQL JDBC Driver
+                
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/leopard", "root", "negs27@sql");
 
-                // Query to fetch the image BLOB by image ID
+               
                 String query = "SELECT image FROM collection WHERE id = ?";
                 ps = con.prepareStatement(query);
                 ps.setString(1, imageId);
                 rs = ps.executeQuery();
 
                 if (rs.next()) {
-                    // Set the response content type (assuming the image is stored as JPEG)
+                  
                     response.setContentType("image/jpeg");
 
-                    // Get the image as a byte array
                     InputStream imageStream = rs.getBinaryStream("image");
 
-                    // Write the image to the response output stream
                     ServletOutputStream outStream = response.getOutputStream();
                     byte[] buffer = new byte[4096];
                     int bytesRead;

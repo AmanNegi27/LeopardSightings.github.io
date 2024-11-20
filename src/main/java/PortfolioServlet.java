@@ -23,12 +23,12 @@ public class PortfolioServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/leopard", "root", "negs27@sql")) {
-            // Query to fetch data
+           
             String query = "SELECT longitude, latitude, timestamp, date, image, accuracy FROM collection";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
-            // Create a list to store the fetched data
+            
             List<Map<String, Object>> dataList = new ArrayList<>();
             while (rs.next()) {
                 Map<String, Object> data = new HashMap<>();
@@ -36,15 +36,15 @@ public class PortfolioServlet extends HttpServlet {
                 data.put("latitude", rs.getString("latitude"));
                 data.put("timestamp", rs.getString("timestamp"));
                 data.put("date", rs.getString("date"));
-                data.put("image", rs.getString("image"));  // Get the image as byte data
+                data.put("image", rs.getString("image"));  
                 data.put("accuracy", rs.getString("accuracy"));
                 dataList.add(data);
             }
 
-            // Set the data as a request attribute
+           
             request.setAttribute("portfolioData", dataList);
 
-            // Forward to JSP page for display
+            
             request.getRequestDispatcher("portfolio.jsp").forward(request, response);
 
         } catch (SQLException e) {

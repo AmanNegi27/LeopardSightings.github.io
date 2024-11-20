@@ -4,7 +4,7 @@
 <head>
     <title>Login</title>
     <style>
-        /* General Reset */
+        
         body, h2, form, label, input, button, div {
             margin: 0;
             padding: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2efe5; /* Soft beige background for a nature vibe */
+            background-color: #f2efe5; 
             color: #333;
             display: flex;
             align-items: center;
@@ -27,12 +27,12 @@
         h2 {
             font-size: 2em;
             text-align: center;
-            color: black; /* Rich brown for a nature vibe */
+            color: black; 
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
         }
 
         form {
-            background: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            background: rgba(255, 255, 255, 0.5); 
             padding: 20px 30px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -59,13 +59,13 @@
         }
 
         input:focus {
-            border-color: #6c873f; /* Forest green border on focus */
+            border-color: #6c873f; 
             outline: none;
             box-shadow: 0 0 6px rgba(108, 135, 63, 0.5);
         }
 
         button {
-            background-color: #6c873f; /* Forest green */
+            background-color: #6c873f; 
             color: #fff;
             font-size: 1em;
             padding: 10px 20px;
@@ -77,7 +77,7 @@
         }
 
         button:hover {
-            background-color: #597230; /* Darker green on hover */
+            background-color: #597230; 
         }
 
         .error-message {
@@ -90,7 +90,7 @@
             text-align: center;
         }
 
-        /* Add some extra flair */
+      
         form::before {
             content: '';
             display: block;
@@ -107,7 +107,7 @@
     <form action="LoginServlet" method="post">
         <h2>Leopard Sighting Login</h2>
         
-        <!-- Display error message if it exists -->
+        
         <c:if test="${not empty errorMessage}">
             <div class="error-message">
                 ${errorMessage}
@@ -116,7 +116,6 @@
 
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" placeholder="Enter your username" required>
-
         <label for="password">Password:</label>
         <input type="password" name="password" id="password" placeholder="Enter your password" required>
 

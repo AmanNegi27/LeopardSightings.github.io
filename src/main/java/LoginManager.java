@@ -12,13 +12,13 @@ public class LoginManager {
     }
 
     public boolean validateUser(String username, String password) {
-        String sql = "SELECT * FROM members WHERE userName = ? AND password = ?"; // Assuming `users` table exists
+        String sql = "SELECT * FROM members WHERE userName = ? AND password = ?"; 
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
-            return resultSet.next(); // Returns true if a matching record is found
+            return resultSet.next(); 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

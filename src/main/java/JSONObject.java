@@ -5,7 +5,7 @@ public class JSONObject {
 
     private Map<String, Object> map;
 
-    // Default constructor
+    
     public JSONObject() {
         this.map = new HashMap<>();
     }
