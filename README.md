@@ -5,7 +5,6 @@ go to src/main->webapp
 To access the java files
 go to src/main->java
 
-
 made by 
 
 Abhinav Baliyan (Abhinav200323)
